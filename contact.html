@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="ja" translate="no">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="google" content="notranslate">
+<title>お問い合わせ | もりのようせい工房</title>
+<meta name="description" content="もりのようせい工房のゲームについてのお問い合わせフォームです。">
+<link rel="icon" href="img/spirit_icon.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f6f2e7;
+  --paper: #fffdf6;
+  --ink: #2e3a2c;
+  --muted: #67725f;
+  --leaf: #4f8a3c;
+  --leaf-deep: #2f5e25;
+  --leaf-soft: #e3eed5;
+  --line: #ddd6c2;
+  --error: #b3372f;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font-family: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", "Yu Gothic", sans-serif;
+  font-weight: 500; line-height: 1.8; -webkit-font-smoothing: antialiased;
+}
+a { color: var(--leaf-deep); }
+.wrap { max-width: 720px; margin: 0 auto; padding: 0 20px; }
+
+.site-header { background: rgba(246, 242, 231, .9); border-bottom: 1px solid var(--line); }
+.site-header .wrap { max-width: 1080px; display: flex; align-items: center; justify-content: space-between; height: 60px; gap: 16px; }
+.logo { display: flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 900; font-size: 18px; color: var(--leaf-deep); white-space: nowrap; }
+.logo svg { width: 30px; height: 30px; flex: none; }
+.back { font-size: 14px; color: var(--muted); text-decoration: none; white-space: nowrap; }
+.back:hover { color: var(--leaf-deep); }
+
+main { padding: 56px 0 80px; }
+.eyebrow { font-size: 13px; letter-spacing: .2em; color: var(--leaf); font-weight: 700; margin: 0 0 6px; }
+h1 { margin: 0 0 16px; font-size: clamp(26px, 4.4vw, 34px); font-weight: 900; }
+.intro { color: var(--muted); margin: 0 0 32px; font-size: 15px; }
+
+form { background: var(--paper); border: 1px solid var(--line); border-radius: 20px; padding: 28px clamp(18px, 4vw, 36px) 32px; }
+.field { margin-bottom: 24px; }
+.field > label, .field > .label { display: block; font-weight: 700; margin-bottom: 8px; font-size: 15px; }
+.req, .opt { display: inline-block; font-size: 11px; padding: 0 8px; border-radius: 99px; margin-left: 8px; vertical-align: 2px; font-weight: 700; }
+.req { background: var(--leaf); color: #fff; }
+.opt { background: #ece7d8; color: var(--muted); }
+.hint { font-size: 13px; color: var(--muted); margin: 6px 0 0; }
+
+input[type="email"], input[type="text"], select, textarea {
+  width: 100%; font: inherit; font-size: 16px; color: var(--ink);
+  background: #fff; border: 1.5px solid var(--line); border-radius: 12px; padding: 10px 14px;
+}
+textarea { min-height: 180px; resize: vertical; line-height: 1.7; }
+input:focus, select:focus, textarea:focus { outline: none; border-color: var(--leaf); box-shadow: 0 0 0 3px var(--leaf-soft); }
+.kinds { display: grid; gap: 8px; }
+.kinds label {
+  display: flex; align-items: center; gap: 10px; padding: 10px 14px; border: 1.5px solid var(--line);
+  border-radius: 12px; background: #fff; cursor: pointer; font-size: 15px;
+}
+.kinds label:has(input:checked) { border-color: var(--leaf); background: var(--leaf-soft); }
+.kinds input, .agree input { accent-color: var(--leaf); width: 18px; height: 18px; flex: none; margin: 0; }
+.agree { display: flex; gap: 10px; align-items: flex-start; font-size: 15px; cursor: pointer; }
+.agree input { margin-top: 5px; }
+.count { text-align: right; font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+.honey { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+.error { color: var(--error); font-size: 13px; margin: 6px 0 0; display: none; }
+.field.invalid .error { display: block; }
+.field.invalid input, .field.invalid textarea, .field.invalid .kinds label { border-color: var(--error); }
+
+button[type="submit"] {
+  display: block; width: 100%; font: inherit; font-weight: 700; font-size: 16px; color: #fff;
+  background: var(--leaf); border: 0; border-radius: 99px; padding: 14px; cursor: pointer; transition: filter .2s;
+}
+button[type="submit"]:hover { filter: brightness(1.08); }
+button[type="submit"]:disabled { opacity: .6; cursor: wait; }
+.form-message { margin: 16px 0 0; font-size: 14px; color: var(--error); text-align: center; min-height: 1em; }
+
+.done { display: none; text-align: center; background: var(--paper); border: 1px solid var(--line); border-radius: 20px; padding: 40px 24px; }
+.done h2 { margin: 0 0 12px; font-size: 22px; color: var(--leaf-deep); }
+.done p { margin: 0 0 8px; color: var(--muted); }
+.sent form, .sent .intro { display: none; }
+.sent .done { display: block; }
+
+.other { margin-top: 32px; font-size: 14px; color: var(--muted); }
+
+footer { background: var(--leaf-deep); color: #e3eed5; padding: 32px 0; font-size: 13px; }
+footer .wrap { max-width: 1080px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px 32px; }
+footer nav { display: flex; flex-wrap: wrap; gap: 8px 20px; }
+footer a { color: #e3eed5; text-decoration: none; }
+footer a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="logo" href="./">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3C9 9 6 15 8.5 21.5 10.3 26 14 28.5 16 29c2-.5 5.7-3 7.5-7.5C26 15 23 9 16 3z" fill="#4f8a3c"/><path d="M16 9v19" stroke="#e3eed5" stroke-width="1.6" stroke-linecap="round"/><path d="M16 15l-4-3M16 20l4.5-3.5" stroke="#e3eed5" stroke-width="1.4" stroke-linecap="round"/></svg>
+      <span>もりのようせい工房</span>
+    </a>
+    <a class="back" href="./">← トップへ</a>
+  </div>
+</header>
+
+<main>
+  <div class="wrap" id="page">
+    <p class="eyebrow">CONTACT</p>
+    <h1>お問い合わせ</h1>
+    <p class="intro">ゲームの不具合やデータのこと、ご意見などはこちらからお送りください。内容を確かめて、入力されたメールアドレスにお返事します。お返事まで数日かかることがあります。</p>
+
+    <form id="contact" novalidate>
+      <div class="field" data-field="kind">
+        <span class="label">お問い合わせの種類<span class="req">必須</span></span>
+        <div class="kinds">
+          <label><input type="radio" name="kind" value="bug"> 不具合の報告</label>
+          <label><input type="radio" name="kind" value="data"> データ・引き継ぎについて</label>
+          <label><input type="radio" name="kind" value="delete"> データ削除の依頼</label>
+          <label><input type="radio" name="kind" value="report"> 不適切な名前・不正の報告</label>
+          <label><input type="radio" name="kind" value="other"> その他</label>
+        </div>
+        <p class="error">お問い合わせの種類を選んでください。</p>
+      </div>
+
+      <div class="field">
+        <label for="game">ゲーム<span class="opt">任意</span></label>
+        <select id="game" name="game">
+          <option value="">選んでください</option>
+          <option>森の小さな精霊</option>
+          <option>異界ウォーカー</option>
+          <option>アウトリング</option>
+          <option>そのほか</option>
+        </select>
+      </div>
+
+      <div class="field" data-field="email">
+        <label for="email">返信先のメールアドレス<span class="req">必須</span></label>
+        <input type="email" id="email" name="email" autocomplete="email" maxlength="254" placeholder="example@example.com">
+        <p class="hint">「morino.yosei.koubou@gmail.com」からのメールを受け取れるようにしておいてください。</p>
+        <p class="error">メールアドレスを正しく入れてください。</p>
+      </div>
+
+      <div class="field">
+        <label for="player_name">プレイヤー名<span class="opt">任意</span></label>
+        <input type="text" id="player_name" name="player_name" maxlength="40" autocomplete="off">
+        <p class="hint" id="player-hint">データ削除の依頼や、名前・不正の報告のときは、あなたのプレイヤー名（報告のときは相手の名前も内容に）を書いてください。森の小さな精霊では、分かればフレンドコード（「交流」→「フレンド」に出ている6文字）も内容に添えてください。</p>
+      </div>
+
+      <div class="field" data-field="body">
+        <label for="body">内容<span class="req">必須</span></label>
+        <textarea id="body" name="body" maxlength="4000" placeholder="いつ・どの画面で・何が起きたかなど、できるだけくわしく書いてください。"></textarea>
+        <div class="count"><span id="count">0</span> / 4000</div>
+        <p class="error">内容を書いてください。</p>
+      </div>
+
+      <div class="honey" aria-hidden="true">
+        <label for="website">ここには何も入れないでください</label>
+        <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+      </div>
+
+      <div class="field" data-field="agree">
+        <label class="agree"><input type="checkbox" id="agree" name="agree"> <span><a href="https://morino-yosei.github.io/privacy.html" target="_blank" rel="noopener">プライバシーポリシー</a>に同意して送信します<span class="req">必須</span></span></label>
+        <p class="error">プライバシーポリシーへの同意が必要です。</p>
+      </div>
+
+      <button type="submit" id="submit">送信する</button>
+      <p class="form-message" id="form-message" role="alert"></p>
+    </form>
+
+    <div class="done" role="status">
+      <h2>送信しました</h2>
+      <p>お問い合わせありがとうございます。</p>
+      <p>内容を確かめて、入力されたメールアドレスにお返事します。</p>
+      <p style="margin-top: 24px;"><a href="./">トップへもどる</a></p>
+    </div>
+
+    <p class="other">Discord の<a href="https://discord.gg/pcxVxKpd92" target="_blank" rel="noopener">公式サーバー</a>でも運営に連絡できます。</p>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div>© 2026 もりのようせい工房</div>
+    <nav>
+      <a href="contact.html">お問い合わせ</a>
+      <a href="https://morino-yosei.github.io/privacy.html">プライバシーポリシー</a>
+      <a href="https://morino-yosei.github.io/tokushoho.html">特定商取引法にもとづく表示</a>
+      <a href="https://morino-yosei.github.io/delete.html">データの削除</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+const ENDPOINT = "https://rnbuobycnhdwjufypgof.supabase.co/functions/v1/contact";
+const form = document.getElementById("contact");
+const body = document.getElementById("body");
+const message = document.getElementById("form-message");
+const submit = document.getElementById("submit");
+
+// ?kind=delete などで種類を選んだ状態で開ける
+const preset = new URLSearchParams(location.search).get("kind");
+if (preset) {
+  const r = form.querySelector(`input[name="kind"][value="${CSS.escape(preset)}"]`);
+  if (r) r.checked = true;
+}
+
+body.addEventListener("input", () => { document.getElementById("count").textContent = body.value.length; });
+form.addEventListener("input", (e) => {
+  const f = e.target.closest(".field");
+  if (f) f.classList.remove("invalid");
+});
+
+function check() {
+  const kind = form.querySelector('input[name="kind"]:checked');
+  const email = form.email.value.trim();
+  const results = {
+    kind: !!kind,
+    email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email),
+    body: form.body.value.trim() !== "",
+    agree: form.agree.checked,
+  };
+  let first = null;
+  for (const [name, ok] of Object.entries(results)) {
+    const field = form.querySelector(`[data-field="${name}"]`);
+    field.classList.toggle("invalid", !ok);
+    if (!ok && !first) first = field;
+  }
+  if (first) first.scrollIntoView({ behavior: "smooth", block: "center" });
+  return !first;
+}
+
+const ERRORS = {
+  too_many: "短い間に何度も送られています。少し時間をおいてから、もう一度お試しください。",
+  email: "メールアドレスを正しく入れてください。",
+};
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  message.textContent = "";
+  if (!check()) return;
+  submit.disabled = true;
+  submit.textContent = "送信しています…";
+  try {
+    const res = await fetch(ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        kind: form.querySelector('input[name="kind"]:checked').value,
+        game: form.game.value,
+        email: form.email.value.trim(),
+        player_name: form.player_name.value.trim(),
+        body: form.body.value.trim(),
+        agree: form.agree.checked,
+        website: form.website.value,
+      }),
+    });
+    const j = await res.json().catch(() => ({}));
+    if (!res.ok || !j.ok) throw new Error(j.error || "server");
+    document.getElementById("page").classList.add("sent");
+    scrollTo({ top: 0 });
+  } catch (err) {
+    message.textContent = ERRORS[err.message] ||
+      "送信できませんでした。通信の状態を確かめて、もう一度お試しください。続くときは Discord でお知らせください。";
+    submit.disabled = false;
+    submit.textContent = "送信する";
+  }
+});
+</script>
+</body>
+</html>
